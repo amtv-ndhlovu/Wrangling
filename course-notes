@@ -1,0 +1,351 @@
+Nomenclature:
+##: This indicates the end of subsection
+---: This indicates the end of a section
+** : This indicates a section title
+
+
+== Data Wrangling Notes ==
+
+Section of the book that deals with the topic : https://rafalab.github.io/dsbook/introduction-to-data-wrangling.html
+
+
+**Section 1: Data Import**
+
+(https://rafalab.github.io/dsbook/importing-data.html)
+
+- Many datasets are stored in spreadsheets. A spreadsheet is essentially a file version of a data frame with rows and columns.
+Spreadsheets have rows separated by returns and columns separated by a delimiter. The most common delimiters are comma, semicolon, white space and tab.
+
+- Many spreadsheets are raw text files and can be read with any basic text editor. However, some formats are proprietary and cannot be read with a text editor, such as Microsoft Excel files (.xls).
+
+- Most import functions assume that the first row of a spreadsheet file is a header with column names. To know if the file has a header, it helps to look at the file with a text editor before trying to import it.
+##
+
+(https://rafalab.github.io/dsbook/importing-data.html#paths-and-the-working-directory)
+
+- The working directory is where R looks for files and saves files by default.
+
+- See your working directory with getwd(). Change your working directory with setwd().
+
+- We suggest you create a directory for each project and keep your raw data inside that directory.
+
+- Use the file.path() function to generate a full path from a relative path and a file name. Use file.path() instead of paste() because file.path() is aware of your operating system and will use the correct slashes to navigate your machine.
+
+- The file.copy() function copies a file to a new path.
+##
+
+(https://rafalab.github.io/dsbook/importing-data.html#the-readr-and-readxl-packages)
+
+- readr is the tidyverse library that includes functions for reading data stored in text file spreadsheets into R. Functions in the package include read_csv(), read_tsv(), read_delim() and more. These differ by the delimiter they use to split columns.
+
+- The readxl package provides functions to read Microsoft Excel formatted files.
+
+- The excel_sheets() function gives the names of the sheets in the Excel file. These names are passed to the sheet argument for the readxl functions read_excel(), read_xls() and read_xlsx().
+
+- The read_lines() function shows the first few lines of a file in R.
+##
+
+(https://rafalab.github.io/dsbook/importing-data.html#r-base-importing-functions)
+
+- R-base import functions (read.csv(), read.table(), read.delim()) generate data frames rather than tibbles and character variables are converted to factors. This can be avoided by setting the argument stringsAsFactors=FALSE.
+
+- Starting from R 4.0.0, the function read.table() changed its default from stringsAsFactors = TRUE to stringsAsFactors = FALSE.
+
+- In this way, when we are using read.table(), read.csv(), or read.delim(), the character features in the data file won't be automatically read in as "factor", but instead will remain as "character".
+##
+
+(https://rafalab.github.io/dsbook/importing-data.html#downloading-files)
+
+- The read_csv() function and other import functions can read a URL directly.
+
+- If you want to have a local copy of the file, you can use download.file().
+
+- tempdir() creates a directory with a name that is very unlikely not to be unique.
+
+- tempfile() creates a character string that is likely to be a unique filename.
+##
+
+--------------------------------------------------------------------------------------------------------------
+
+** Section 2: Tidy Data **
+
+In the Tidy Data section, you will learn how to convert data from a raw to a tidy format.
+
+This section is divided into three parts: Reshaping Data, Combining Tables, and Web Scraping. There are comprehension checks at the end of each part.
+
+After completing the Tidy Data section, you will be able to:
+
+-Reshape data using functions from the tidyr package, including gather(), spread(), separate() and unite().
+-Combine information from different tables using join functions from the dplyr package.
+-Combine information from different tables using binding functions from the dplyr package.
+-Use set operators to combine data frames.
+-Gather data from a website through web scraping and use of CSS selectors.
+
+(https://rafalab.github.io/dsbook/tidyverse.html#tidy-data)
+
+- In tidy data, each row represents an observation and each column represents a different variable.
+
+- In wide data, each row includes several observations and one of the variables is stored in the header.
+##
+
+(https://rafalab.github.io/dsbook/reshaping-data.html)
+
+- The tidyr package includes several functions that are useful for tidying data.
+
+- The gather() function converts wide data into tidy data, this has been superceded by pivot_longer.
+
+- The spread() function converts tidy data to wide data, this has been superceded by pivot_wider.
+##
+
+(https://rafalab.github.io/dsbook/reshaping-data.html#separate)
+
+- The separate() function splits one column into two or more columns at a specified character that separates the variables.
+
+- When there is an extra separation in some of the entries, use fill="right" to pad missing values with NAs, or use extra="merge" to keep extra elements together.
+
+- The unite() function combines two columns and adds a separating character.
+##
+
+(https://rafalab.github.io/dsbook/joining-tables.html)
+
+- The join functions in the dplyr package combine two tables such that matching rows are together.
+
+- left_join() only keeps rows that have information in the first table.
+
+- right_join() only keeps rows that have information in the second table.
+
+- inner_join() only keeps rows that have information in both tables.
+
+- full_join() keeps all rows from both tables.
+
+- semi_join() keeps the part of first table for which we have information in the second.
+
+- anti_join() keeps the elements of the first table for which there is no information in the second.
+##
+
+(https://rafalab.github.io/dsbook/joining-tables.html#binding)
+
+- Unlike the join functions, the binding functions do not try to match by a variable, but rather just combine datasets.
+
+- bind_cols() binds two objects by making them columns in a tibble. The R-base function cbind() binds columns but makes a data frame or matrix instead.
+
+- The bind_rows() function is similar but binds rows instead of columns. The R-base function rbind() binds rows but makes a data frame or matrix instead.
+##
+
+(https://rafalab.github.io/dsbook/joining-tables.html#set-operators)
+
+- By default, the set operators in R-base work on vectors. If tidyverse/dplyr are loaded, they also work on data frames.
+
+- You can take intersections of vectors using intersect(). This returns the elements common to both sets.
+
+- You can take the union of vectors using union(). This returns the elements that are in either set.
+
+- The set difference between a first and second argument can be obtained with setdiff(). Note that this function is not symmetric (The setdiff() command returns rows in df1 but not df2!!!).
+
+- The function set_equal() tells us if two sets are the same, regardless of the order of elements.
+##
+
+(https://rafalab.github.io/dsbook/web-scraping.html)
+
+- Web scraping is extracting data from a website.
+
+- The rvest web harvesting package includes functions to extract nodes of an HTML document: html_nodes() extracts all nodes of different types, and html_node() extracts the first node.
+
+- html_table() converts an HTML table to a data frame.
+-----------------------------------------------------------------------------------------------------
+
+** Section 3: String Processing **
+
+In the String Processing section, we use case studies that help demonstrate how string processing is a powerful tool useful for overcoming many data wrangling challenges. You will see how the original raw data was processed to create the data frames we have used in courses throughout this series.
+
+This section is divided into three parts. There are comprehension checks at the end of each of the three parts.
+
+After completing the String Processing section, you will be able to:
+
+- Remove unwanted characters from text.
+- Extract numeric values from text.
+- Find and replace characters.
+- Extract specific parts of strings.
+- Convert free form text into more uniform formats.
+- Split strings into multiple values.
+- Use regular expressions (regex) to process strings.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html)
+
+The most common tasks in string processing include:
+
+- extracting numbers from strings
+
+- removing unwanted characters from text
+
+- finding and replacing characters
+
+- extracting specific parts of strings
+
+- converting free form text to more uniform formats
+
+- splitting strings into multiple values
+
+- The stringr package in the tidyverse contains string processing functions that follow a similar naming format (str_functionname) and are compatible with the pipe.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#how-to-escape-when-defining-strings)
+
+- Define a string by surrounding text with either single quotes or double quotes.
+
+- To include a single quote inside a string, use double quotes on the outside. To include a double quote inside a string, use single quotes on the outside.
+
+- The cat() function displays a string as it is represented inside R.
+
+- To include a double quote inside of a string surrounded by double quotes, use the backslash (\) to escape the double quote. 
+
+- Escape a single quote to include it inside of a string defined by single quotes.
+
+We will see additional uses of the escape later.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#stringr)
+
+- The main types of string processing tasks are detecting, locating, extracting and replacing elements of strings.
+
+- The stringr package from the tidyverse includes a variety of string processing functions that begin with str_ and take the string as the first argument, which makes them compatible with the pipe.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#case-study-1-us-murders-data)
+
+- Use the str_detect() function to determine whether a string contains a certain pattern.
+
+- Use the str_replace_all() function to replace all instances of one pattern with another pattern. To remove a pattern, replace with the empty string ("").
+
+- The parse_number() function removes punctuation from strings and converts them to numeric.
+
+- mutate_at() performs the same transformation on the specified column numbers.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#case-study-2-self-reported-heights)
+
+- In the raw heights data, many students did not report their height as the number of inches as requested. There are many entries with real height information but in the wrong format, which we can extract with string processing. 
+
+- When there are both text and numeric entries in a column, the column will be a character vector. Converting this column to numeric will result in NAs for some entries.
+
+- To correct problematic entries, look for patterns that are shared across large numbers of entries, then define rules that identify those patterns and use these rules to write string processing tasks.
+
+- Use suppressWarnings() to hide warning messages for a function.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#regular-expressions)
+
+- A regular expression (regex) is a way to describe a specific pattern of characters of text. A set of rules has been designed to do this specifically and efficiently.
+
+- stringr functions can take a regex as a pattern.
+
+- str_detect() indicates whether a pattern is present in a string.
+
+- The main difference between a regex and a regular string is that a regex can include special characters.
+
+- The | symbol inside a regex means "or".
+
+- Use '\\d' to represent digits. The backlash is used to distinguish it from the character 'd'. In R, you must use two backslashes for digits in regular expressions; in some other languages, you will only use one backslash for regex special characters.
+
+- str_view() highlights the first occurrence of a pattern, and the str_view_all() function highlights all occurrences of the pattern.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#character-classes) or
+(https://rafalab.github.io/dsbook/string-processing.html#anchors) or 
+(https://rafalab.github.io/dsbook/string-processing.html#quantifiers)
+
+- Define strings to test your regular expressions, including some elements that match and some that do not. This allows you to 
+- check for the two types of errors: failing to match and matching incorrectly.
+
+- Square brackets define character classes: groups of characters that count as matching the pattern. You can use ranges to define character classes, such as [0-9] for digits and [a-zA-Z] for all letters.
+
+- Anchors define patterns that must start or end at specific places. ^ and $ represent the beginning and end of the string respectively.
+
+- Curly braces are quantifiers that state how many times a certain character can be repeated in the pattern. \\d{1,2} matches exactly 1 or 2 consecutive digits.
+
+- Example: pattern <- "^[4-7]'\\d{1,2}\"$" where:
+  - ^ represents the start of the string
+  - [4-7] represents a single digit between 4 & 7
+  - ' represents the symbol for feet
+  - \\d{1,2} represents one or two digits
+  - \" representsthe inches symbol
+  - $ represents the end of a string
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#search-and-replace-with-regex) or 
+(https://rafalab.github.io/dsbook/string-processing.html#white-space-s) or 
+(https://rafalab.github.io/dsbook/string-processing.html#quantifiers-1)
+
+- str_replace() replaces the first instance of the detected pattern with a specified string.
+
+- Spaces are characters and R does not ignore them. Spaces are specified by the special character \\s.
+
+- Additional quantifiers include *, + and ?. * means 0 or more instances of the previous character. ? means 0 or 1 instances. + means 1 or more instances.
+
+- Before removing characters from strings with functions like str_replace() and str_replace_all(), consider whether that replacement would have unintended effects.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#groups)
+
+- Groups are defined using parentheses.
+
+- Once we define groups, we can use the function str_match() to extract the values these groups define. str_extract() extracts only strings that match a pattern, not the values defined by groups.
+
+- You can refer to the ith group with \\i. For example, refer to the value in the second group with \\2.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#testing-and-improving)
+
+ - Wrangling with regular expressions is often an iterative process of testing the approach, looking for problematic entries, and improving the patterns.
+
+- Use the pipe to connect stringr functions.
+
+- It may not be worth writing code to correct every unique problem in the data, but string processing techniques are flexible enough for most needs
+
+cheat sheet for regex:
+
+https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#the-extract-function)
+
+- The extract() function behaves similarly to the separate() function but allows extraction of groups from regular expressions.
+
+^ = start of the string
+[4-7] = one digit, either 4, 5, 6, or 7
+\\s* = none or more white space
+[,\\.\\s+] = feet symbol is either ,, . or at least one space
+\\s* = none or more white space
+\\d* = none or more digits
+$ = end of the string
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#the-extract-function)
+
+- The extract() function behaves similarly to the separate() function but allows extraction of groups from regular expressions.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#string-splitting)
+
+- The function str_split() splits a string into a character vector on a delimiter (such as a comma, space or underscore). By default, str_split() generates a list with one element for each original string. Use the function argument simplify=TRUE to have str_split() return a matrix instead.
+
+- The map() function from the purrr package applies the same function to each element of a list. To extract the ith entry of each element x, use map(x, i).
+
+- map() always returns a list. Use map_chr() to return a character vector and map_int() to return an integer.
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#case-study-3-extracting-tables-from-a-pdf)
+
+See code in the strings-processing file
+##
+
+(https://rafalab.github.io/dsbook/string-processing.html#recode)
+
+- Change long factor names with the recode() function from the tidyverse. 
+
+- Other similar functions include recode_factor() and fct_recoder() in the forcats package in the tidyverse. The same result could be obtained using the case_when() function, but recode() is more efficient to write.
+-----------------------------------------------------------------------------------------------------
+
+** Section 4: Dates, Times, and Text Mining Overview **
+
